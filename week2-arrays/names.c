@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <cs50.h>
 
-
 int main(void)
 {
   string names[4];
