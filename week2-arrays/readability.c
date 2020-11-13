@@ -11,7 +11,7 @@ int main(void)
     int words = 1;
     int sentances = 0;
     float L, S, index;
-    for (i = 0, n = strlen(s); i < n; i++)
+    for (int i = 0, n = strlen(s); i < n; i++)
     {
         if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z')) 
         {
