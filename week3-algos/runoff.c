@@ -1,5 +1,6 @@
 #include <cs50.h>
 #include <stdio.h>
+#include <string.h>
 
 // Max voters and candidates
 #define MAX_VOTERS 100
@@ -130,8 +131,10 @@ bool vote(int voter, int rank, string name)
     // instantiate a loop for the candidates
     for (int i = 0; i < candidate_count; i++)
     {
+        // if a candidate is correctly named in the election
         if (strcmp(candidates[i].name, name) == 0)
         {
+            // the value of i represents the preference number for that voter and rank
             preferences[voter][rank] = i;
             return true;
         }
@@ -142,14 +145,20 @@ bool vote(int voter, int rank, string name)
 // Tabulate votes for non-eliminated candidates
 void tabulate(void)
 {
+    // loop through count of voter count
     for (int i = 0; i < voter_count; i++)
     {
+        // loop through candidate count
         for (int j = 0; j < candidate_count; j++)
         {
+            // instantiate and integer to represent the voter preference
             int choice = preferences[i][j];
+            // if candidate is still active...
             if (candidates[choice].eliminated == false)
             {
+                // increase vote total for that candidate
                 candidates[choice].votes++;
+                break;
             }
         }
     }
@@ -158,10 +167,14 @@ void tabulate(void)
 // Print the winner of the election, if there is one
 bool print_winner(void)
 {
+    // should be the candidate with a vote count greater than voter_count/2
+    // loop through candidate_count, and print the name of the candidate with greater than 50% of votes, or return false
     for (int i = 0; i < candidate_count; i++)
     {
+        // set condition as mentioned above
         if (candidates[i].votes > (voter_count / 2))
         {
+            // print name of candidate, as mentioned above
             printf("%s\n", candidates[i].name);
             return true;
         }
@@ -172,14 +185,51 @@ bool print_winner(void)
 // Return the minimum number of votes any remaining candidate has
 int find_min(void)
 {
-    // TODO
-    return 0;
+    // set a temp value for the low number of votes (such as the voter_coutn)
+    int minVotes = voter_count;
+    // loop through any remaining candidates
+    for (int i = 0; i < candidate_count; i++)
+    {
+        // if candidate has fewer votes than minVote and is still in the race...
+        if (candidates[i].votes < minVotes && candidates[i].eliminated == false)
+        {
+            // replace the count of minVotes with candidate[i]'s votes
+            minVotes = candidates[i].votes;
+        }
+    }
+    return minVotes;
 }
 
 // Return true if the election is tied between all candidates, false otherwise
 bool is_tie(int min)
 {
-    // TODO
+    // instantiate placeholder integers for number of candidates running and the number of candidates that have the minimum number of votes
+    int votes = 0;
+    int running = 0;
+
+    // loop through candidate count
+    for (int i = 0; i < candidate_count; i++)
+    {
+        // set condition candidate is still running and candidate has min votes
+        if (candidates[i].eliminated == false && candidates[i].votes == min)
+        {
+            // increment votes and running
+            votes++;
+            running++;
+        }
+        // check for condition where candidate is running but does not have min votes
+        else if (candidates[i].eliminated == false)
+        {
+            //increment running only
+            running++;
+        }
+    }
+
+    // if there is a tie, running and votes should be the same value
+    if (votes == running)
+    {
+        return true;
+    }
     return false;
 }
 
