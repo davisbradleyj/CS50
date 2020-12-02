@@ -130,7 +130,7 @@ bool vote(int voter, int rank, string name)
     // instantiate a loop for the candidates
     for (int i = 0; i < candidate_count; i++)
     {
-        if (strcmp(candidates[i].names, names) == 0)
+        if (strcmp(candidates[i].name, name) == 0)
         {
             preferences[voter][rank] = i;
             return true;
@@ -150,11 +150,9 @@ void tabulate(void)
             if (candidates[choice].eliminated == false)
             {
                 candidates[choice].votes++;
-                return 0;
             }
         }
     }
-    return 1;
 }
 
 // Print the winner of the election, if there is one
@@ -188,6 +186,14 @@ bool is_tie(int min)
 // Eliminate the candidate (or candidates) in last place
 void eliminate(int min)
 {
-    // TODO
+    // loop through remaining candidates to find the candidate with a vote total = min
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (candidates[i].eliminated == false && candidates[i].votes == min)
+        {
+            // reset eliminated status to 'true'
+            candidates[i].eliminated = true;
+        }
+    }
     return;
 }
